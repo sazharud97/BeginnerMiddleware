@@ -4,11 +4,18 @@ const morgan = require('morgan');
 
 // this is called for every single request
 app.use(morgan('dev'))
+
 app.use((req, res, next)=> {
     req.requestTime = Date.now();
     console.log(req.method.toUpperCase(), req.path, req.requestTime);
     next();
 })
+
+app.use('/dogs', (req, res, next) => {
+    console.log("I actually like cats more")
+    next();
+})
+
 // app.use((req, res, next) => {
 //     console.log('hi express middlewareuuhhh')
 //     // allows app to continue instead of stopping at call
@@ -21,12 +28,19 @@ app.use((req, res, next)=> {
 //     return next();
 // })
 
-// app.get('/', (req, res) => {
-//     res.send('HOME PAGE SAH')
-// })
+app.get('/', (req, res) => {
+    console.log(`REQUEST DATE: ${req.requestTime}`);
+    res.send('HOME PAGE SAH')
+})
 
 app.get('/dogs', (req, res) => {
+    console.log(`REQUEST DATE: ${req.requestTime}`);
     res.send('WOOF WOOF')
+})
+
+// response if request doesn't hit any of the paths above
+app.use((req, res) => {
+    res.status(404).send('NOT FOUND')
 })
 
 app.listen(3000, ()=> {
