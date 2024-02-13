@@ -16,6 +16,14 @@ app.use('/dogs', (req, res, next) => {
     next();
 })
 
+const verifyPassword = (req, res, next) => {
+    const {password} = req.query;
+    if(password === 'chicken') {
+        next();
+    }
+    res.send('SORRY! Password needed')
+}
+
 // app.use((req, res, next) => {
 //     console.log('hi express middlewareuuhhh')
 //     // allows app to continue instead of stopping at call
@@ -36,6 +44,11 @@ app.get('/', (req, res) => {
 app.get('/dogs', (req, res) => {
     console.log(`REQUEST DATE: ${req.requestTime}`);
     res.send('WOOF WOOF')
+})
+
+// calling verifyPassword in the "GET" params
+app.get('/secret', verifyPassword, (req, res)=> {
+    res.send("I'm gay...for you ;)")
 })
 
 // response if request doesn't hit any of the paths above
